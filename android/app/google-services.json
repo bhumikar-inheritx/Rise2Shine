@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "663398493674",
+    "project_id": "rise2shine-a907f",
+    "storage_bucket": "rise2shine-a907f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663398493674:android:30484a93b5689cd7bc5693",
+        "android_client_info": {
+          "package_name": "com.inx.rise2shine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVWKitny1UFA1W1IirAfCa3s2bKgoiIv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
