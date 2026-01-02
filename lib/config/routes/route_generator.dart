@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../feature/splash/splash_screen.dart';
 import '../../feature/profile_selection/view/profile_selection.dart';
+import '../../feature/signup/view/signup.dart';
 import 'app_routes.dart';
 
 class RouteGenerator {
@@ -18,6 +19,17 @@ class RouteGenerator {
       case AppRoutes.profileSelectionRoute:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => const ProfileSelection(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+            );
+          },
+        );
+
+      case AppRoutes.signupRoute:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const Signup(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,

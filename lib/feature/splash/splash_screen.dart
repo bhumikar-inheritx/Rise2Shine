@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../config/theme/app_colors.dart';
 import '../../config/routes/app_routes.dart';
+import '../../config/theme/app_colors.dart';
+import '../../core/constants/asset_constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacementNamed(context, AppRoutes.profileSelectionRoute);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: SizedBox(
           child: Image.asset(
-            'assets/icons/app_logo.png',
+            AssetConstants.logo,
             fit: BoxFit.contain,
           ),
         ),

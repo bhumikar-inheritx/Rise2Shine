@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../config/theme/app_colors.dart';
+import '../../../core/constants/asset_constants.dart';
 import '../widget/custom_button.dart';
 
 class ProfileSelection extends StatefulWidget {
@@ -26,7 +27,7 @@ class _ProfileSelectionState extends State<ProfileSelection> {
     return Stack(
       children: [
         SvgPicture.asset(
-          'assets/icons/bg_profile_selection.svg',
+          AssetConstants.bgProfileSelection,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
@@ -36,57 +37,60 @@ class _ProfileSelectionState extends State<ProfileSelection> {
           ),
         ),
         Positioned(
-          top: 139.sp,
-          right: -56.sp,
-          left: -78.sp,
-          bottom: 205,
-          child: SizedBox(
+          top: 139.h,
+          left: -78.w,
+          child: Image.asset(
+            AssetConstants.profileSelection,
             width: 574.w,
             height: 612.h,
-            child: Image.asset(
-              'assets/icons/profile_selection.png',
-              fit: BoxFit.contain,
-            ),
+            fit: BoxFit.contain,
           ),
         ),
-        DraggableScrollableSheet(
-          initialChildSize: 0.4,
-          minChildSize: 0.4,
-          maxChildSize: 0.8,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(24.r),
-                ),
+        Positioned(
+          top: 604.h,
+          left: 0,
+          right: 0,
+          // bottom: 0,
+          child: Container(
+            width: 440.w,
+            height: 352.h,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(50.r),
+                topRight: Radius.circular(50.r),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(24.w),
-                child: Column(
-                  children: [
-                    _buildProfileOption(
-                      'I am a parent',
-                      'assets/icons/parent_profile_selection.svg',
-                      'parent',
-                    ),
-                    SizedBox(height: 20.h),
-                    _buildProfileOption(
-                      'I am a child',
-                      'assets/icons/child_profile_selection.svg',
-                      'child',
-                    ),
-                    SizedBox(height: 40.h),
-                    CustomButton(
-                      text: 'Choose profile',
-                      onPressed: () {},
-                    ),
-                  ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                _buildProfileOption(
+                  'I am a parent',
+                  AssetConstants.parentProfileSelection,
+                  'parent',
                 ),
-              ),
-            );
-          },
-        ),
+                SizedBox(width: 20.w),
+                _buildProfileOption(
+                  'I am a child',
+                  AssetConstants.childProfileSelection,
+                  'child',
+                ),
+                SizedBox(height: 44.h),
+                CustomButton(
+                  text: 'Choose profile',
+                  height: 54.h,
+                  width: 367.w,
+                  fontSize: 20.sp,
+                  onPressed: () {
+                    if (selectedProfile == 'parent') {
+                      Navigator.pushNamed(context, '/signup');
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
@@ -98,45 +102,56 @@ class _ProfileSelectionState extends State<ProfileSelection> {
           selectedProfile = value;
         });
       },
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 32.sp,
+          right: 32.sp,
+          left: 32.sp,
         ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 38.82.w,
-              height: 64.27.h,
-              child: CircleAvatar(
-                backgroundColor: AppColors.avtarbackground,
-                child: SvgPicture.asset(
-                  iconPath,
+        child: SizedBox(
+          width: 367.w,
+          height: 70.h,
+          child: Row(
+            children: [
+              ClipOval(
+                child: Container(
+                  width: 70.w,
+                  height: 70.w,
+                  color: AppColors.avtarbackground,
+                  child: SvgPicture.asset(
+                    iconPath,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 16.w),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+              SizedBox(width: 14.w),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Unbounded',
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-            ),
-            Radio<String>(
-              value: value,
-              groupValue: selectedProfile,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedProfile = newValue!;
-                });
-              },
-              activeColor: AppColors.primaryColor,
-            ),
-          ],
+              SizedBox(width: 8.w),
+              SizedBox(
+                width: 28.w,
+                height: 28.h,
+                child: Radio<String>(
+                  value: value,
+                  groupValue: selectedProfile,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedProfile = newValue!;
+                    });
+                  },
+                  activeColor: AppColors.primaryColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
