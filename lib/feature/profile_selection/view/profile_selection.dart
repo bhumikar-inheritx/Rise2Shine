@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../config/theme/app_colors.dart';
 import '../../../core/constants/asset_constants.dart';
+import '../../../core/constants/text_constants.dart';
 import '../widget/custom_button.dart';
 
 class ProfileSelection extends StatefulWidget {
@@ -65,19 +66,19 @@ class _ProfileSelectionState extends State<ProfileSelection> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 _buildProfileOption(
-                  'I am a parent',
+                  TextConstants.iAmAParent,
                   AssetConstants.parentProfileSelection,
                   'parent',
                 ),
                 SizedBox(width: 20.w),
                 _buildProfileOption(
-                  'I am a child',
+                  TextConstants.iAmAChild,
                   AssetConstants.childProfileSelection,
                   'child',
                 ),
                 SizedBox(height: 44.h),
                 CustomButton(
-                  text: 'Choose profile',
+                  text: TextConstants.chooseProfile,
                   height: 54.h,
                   width: 367.w,
                   fontSize: 20.sp,

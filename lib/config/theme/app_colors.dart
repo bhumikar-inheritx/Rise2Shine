@@ -15,7 +15,7 @@ class AppColors {
   // Text Colors
   static const Color textPrimary = Color(0xFF000000); // Dark gray
   static const Color textSecondary = Color(0xFF6B7280); // Medium gray
-  static const Color textLight = Color(0xFF9CA3AF); // Light gray
+  static const Color textLight = Color(0x33000000); // Light gray
   static const Color textWhite = Color(0xFFFFFFFF); // White text
 
   // Background Colors
@@ -28,7 +28,7 @@ class AppColors {
   static const Color buttonColor = Color(0xFFF8B348);
   // Status Colors
   static const Color successColor = Color(0xFF10B981); // Green
-  static const Color errorColor = Color(0xFFEF4444); // Red
+  static const Color errorColor = Color(0xFFFF3B30); // Red
 
   // bottom Navigation Bar
   // static const Color bottomNav = Color(0xFF6A2CFB);

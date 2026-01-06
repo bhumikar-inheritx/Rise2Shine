@@ -1,18 +1,36 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import 'config/routes/app_routes.dart';
 import 'config/routes/route_generator.dart';
 import 'config/theme/theme_provider.dart';
 import 'core/base/base_provider.dart';
 import 'core/base/locale_provider.dart';
-import 'core/localization/app_localizations.dart';
-import 'core/localization/app_localizations_delegate.dart';
+import 'core/services/fcm_service.dart';
 import 'core/utils/toast_util.dart';
+import 'feature/signup/provider/auth_provider.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
+  print('🚀 App: Starting application initialization');
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    print(' App: Initializing Firebase');
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    print(' App: Initializing FCM');
+    await FCMService.initialize();
+  } catch (e) {
+    print('Firebase initialization failed: $e');
+    print(' App: Continuing without Firebase');
+  }
+
+  print(' App: Running app');
   runApp(const MyApp());
 }
 
@@ -31,6 +49,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => BaseProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
         ),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(

@@ -45,6 +45,10 @@ class TextConstants {
   // Validation Messaged
   static const invalidEmail = 'Please enter a valid email';
   static const invalidPassword = 'Password must be at least 6 characters';
+  static const onlyAlphaNumericAllowed = 'Only alpha numeric value allowed';
+  static const enterValidMobileNumber = 'Enter a valid mobile number';
+  static const fullNameRequired = 'Full name is required';
+  static const phoneNumberRequired = 'Phone number is required';
 
   // Success Messages
   static const loginSuccess = 'Login successful';
@@ -55,4 +59,38 @@ class TextConstants {
   static const cancel = 'Cancel';
   static const retry = 'Retry';
   static const ok = 'OK';
+  static const chooseProfile = 'Choose profile';
+
+  // Profile Selection Texts
+  static const iAmAParent = 'I am a parent';
+  static const iAmAChild = 'I am a child';
+
+  // Signup Texts
+  static const fullName = 'Full name';
+  static const phoneNumber = 'Phone number';
+  static const enterFullName = 'Enter full name';
+  static const enterPhoneNumber = 'Enter phone number';
+  static const phoneCode = '+91';
+  static const verifyOtp = 'Verify OTP';
+  static const enterOtp = 'Enter OTP';
+  static const resendOtp = 'Resend OTP';
+  static const verify = 'Verify';
+  static const setPasscode = 'Set passcode';
+  static const confirmPasscode = 'Confirm passcode';
+  static const forgotPasscode = 'Forgot passcode?';
+  static const pleaseEnterCompleteOtp = 'Please enter complete OTP';
+  static const invalidOtpTryAgain = 'Invalid OTP. Please try again';
+  static const passwordsDoNotMatch = 'Passwords do not match';
+  static const passcodeWrong = 'Passcode is wrong';
+  static const enterPasscode = 'Enter passcode';
+  
+  // Add Child Screen Texts
+  static const addYourChild = 'Add your child';
+  static const chooseAvatar = 'Choose avatar';
+  static const childName = 'Child name';
+  static const enterChildName = 'Enter child name';
+  static const dateOfBirth = 'Date of birth';
+  static const selectDateOfBirth = 'Select date of birth';
+  static const setChildPasscode = 'Set child passcode';
+  static const addChild = 'Add child';
 }

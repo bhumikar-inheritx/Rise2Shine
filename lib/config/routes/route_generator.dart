@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../feature/splash/splash_screen.dart';
+import '../../feature/add_child/view/add_your_child.dart';
+import '../../feature/home/view/home.dart';
 import '../../feature/profile_selection/view/profile_selection.dart';
+import '../../feature/signup/view/forgot_password.dart';
+import '../../feature/signup/view/otp_verification.dart';
 import '../../feature/signup/view/signup.dart';
+import '../../feature/splash/splash_screen.dart';
 import 'app_routes.dart';
 
 class RouteGenerator {
@@ -18,7 +22,8 @@ class RouteGenerator {
 
       case AppRoutes.profileSelectionRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const ProfileSelection(),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const ProfileSelection(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,
@@ -29,7 +34,45 @@ class RouteGenerator {
 
       case AppRoutes.signupRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const Signup(),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Signup(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+            );
+          },
+        );
+
+      case AppRoutes.otpVerificationRoute:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const OtpVerification(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+            );
+          },
+          settings: settings,
+        );
+
+      case AppRoutes.forgotPasswordRoute:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const ForgotPassword(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+            );
+          },
+        );
+
+      case AppRoutes.addChildRoute:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const AddYourChild(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,
@@ -39,12 +82,15 @@ class RouteGenerator {
         );
 
       case AppRoutes.homeRoute:
-        return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: Center(
-              child: Text('Home Screen'),
-            ),
-          ),
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Home(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+            );
+          },
         );
 
       default:
