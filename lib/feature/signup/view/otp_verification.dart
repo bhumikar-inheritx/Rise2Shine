@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 import '../../../config/routes/app_routes.dart';
@@ -8,7 +9,7 @@ import '../../../config/theme/app_colors.dart';
 import '../../../core/constants/asset_constants.dart';
 import '../../../core/constants/text_constants.dart';
 import '../../../core/utils/toast_util.dart';
-import '../../profile_selection/widget/custom_button.dart';
+import '../../../core/widgets/custom_button.dart';
 import '../provider/auth_provider.dart';
 
 class OtpVerification extends StatefulWidget {
@@ -19,14 +20,10 @@ class OtpVerification extends StatefulWidget {
 }
 
 class _OtpVerificationState extends State<OtpVerification> {
-  late List<TextEditingController> _otpControllers;
-  late List<FocusNode> _focusNodes;
-  late List<TextEditingController> _passwordControllers;
-  late List<FocusNode> _passwordFocusNodes;
-  late List<TextEditingController> _confirmPasswordControllers;
-  late List<FocusNode> _confirmPasswordFocusNodes;
-  late List<TextEditingController> _enterPasscodeControllers;
-  late List<FocusNode> _enterPasscodeFocusNodes;
+  final TextEditingController _pinController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _enterPasscodeController = TextEditingController();
   String? _otpError;
   String? _passwordError;
   String? _enterPasscodeError;
@@ -35,9 +32,8 @@ class _OtpVerificationState extends State<OtpVerification> {
   String? _phoneNumber;
   String? _fullName;
   bool _isPasswordReset = false;
-  String? _savedPasscode; // Store the set passcode
+  String? _savedPasscode;
 
-  // Timer variables
   int _resendTimer = 60;
   bool _canResend = false;
 
@@ -53,23 +49,11 @@ class _OtpVerificationState extends State<OtpVerification> {
     _phoneNumber = args?['phoneNumber'];
     _fullName = args?['fullName'];
     _isPasswordReset = args?['isPasswordReset'] ?? false;
-    print(
-        '🔐 OTP: Screen initialized with phone: $_phoneNumber, isReset: $_isPasswordReset');
   }
 
   @override
   void initState() {
     super.initState();
-    _otpControllers = List.generate(6, (index) => TextEditingController());
-    _focusNodes = List.generate(6, (index) => FocusNode());
-    _passwordControllers = List.generate(4, (index) => TextEditingController());
-    _passwordFocusNodes = List.generate(4, (index) => FocusNode());
-    _confirmPasswordControllers =
-        List.generate(4, (index) => TextEditingController());
-    _confirmPasswordFocusNodes = List.generate(4, (index) => FocusNode());
-    _enterPasscodeControllers =
-        List.generate(4, (index) => TextEditingController());
-    _enterPasscodeFocusNodes = List.generate(4, (index) => FocusNode());
     _startResendTimer();
   }
 
@@ -96,35 +80,15 @@ class _OtpVerificationState extends State<OtpVerification> {
 
   @override
   void dispose() {
-    for (var controller in _otpControllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
-    for (var controller in _passwordControllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _passwordFocusNodes) {
-      focusNode.dispose();
-    }
-    for (var controller in _confirmPasswordControllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _confirmPasswordFocusNodes) {
-      focusNode.dispose();
-    }
-    for (var controller in _enterPasscodeControllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _enterPasscodeFocusNodes) {
-      focusNode.dispose();
-    }
+    _pinController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _enterPasscodeController.dispose();
     super.dispose();
   }
 
   bool _validateAndSubmit() {
-    final otp = _otpControllers.map((controller) => controller.text).join();
+    final otp = _pinController.text;
     setState(() {
       if (otp.length < 6) {
         _otpError = 'Please enter complete OTP';
@@ -136,46 +100,42 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   void _onVerify() {
-    print('🔐 OTP: Verify button pressed');
     if (_validateAndSubmit()) {
-      final otp = _otpControllers.map((controller) => controller.text).join();
-      print('🔐 OTP: Entered OTP: $otp');
+      final otp = _pinController.text;
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
       authProvider.verifyOTP(otp).then((success) {
-        print('🔐 OTP: AuthProvider.verifyOTP returned: $success');
         if (success) {
           if (_isPasswordReset) {
-            print('🔐 OTP: Password reset flow - showing success message');
             ToastUtils.showSuccessToast(
                 'Phone number verified. Set new password.');
           }
-          print('🔐 OTP: Moving to set password screen');
           setState(() {
             _showSetPassword = true;
           });
         } else {
-          print('🔐 OTP: Verification failed, showing error');
           setState(() {
             _otpError = authProvider.errorMessage ?? 'Invalid OTP';
           });
         }
       });
-    } else {
-      print('🔐 OTP: OTP validation failed');
     }
   }
 
   bool _validatePasswords() {
-    final password =
-        _passwordControllers.map((controller) => controller.text).join();
-    final confirmPassword =
-        _confirmPasswordControllers.map((controller) => controller.text).join();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
 
     setState(() {
-      if (password.isNotEmpty &&
-          confirmPassword.isNotEmpty &&
-          password != confirmPassword) {
+      if (password.isEmpty) {
+        _passwordError = 'Passcode cannot be empty';
+      } else if (confirmPassword.isEmpty) {
+        _passwordError = 'Confirm passcode cannot be empty';
+      } else if (password.length < 4) {
+        _passwordError = 'Passcode must be 4 digits';
+      } else if (confirmPassword.length < 4) {
+        _passwordError = 'Confirm passcode must be 4 digits';
+      } else if (password != confirmPassword) {
         _passwordError = TextConstants.passwordsDoNotMatch;
       } else {
         _passwordError = null;
@@ -187,9 +147,7 @@ class _OtpVerificationState extends State<OtpVerification> {
 
   void _onSetPasscode() {
     if (_validatePasswords()) {
-      // Save passcode and show enter passcode screen
-      _savedPasscode =
-          _passwordControllers.map((controller) => controller.text).join();
+      _savedPasscode = _passwordController.text;
       setState(() {
         _showEnterPasscode = true;
         _showSetPassword = false;
@@ -198,8 +156,7 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   void _onEnterPasscode() {
-    final enteredPasscode =
-        _enterPasscodeControllers.map((controller) => controller.text).join();
+    final enteredPasscode = _enterPasscodeController.text;
 
     setState(() {
       if (enteredPasscode.length < 4) {
@@ -208,7 +165,6 @@ class _OtpVerificationState extends State<OtpVerification> {
         _enterPasscodeError = TextConstants.passcodeWrong;
       } else {
         _enterPasscodeError = null;
-        // Navigate to add child screen
         Navigator.pushNamed(context, AppRoutes.addChildRoute);
       }
     });
@@ -261,51 +217,40 @@ class _OtpVerificationState extends State<OtpVerification> {
           SizedBox(height: 4.h),
           Container(
             height: 52.h,
-            child: Row(
+            child: Pinput(
+              controller: _pinController,
+              length: 6,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(6, (index) {
-                return Flexible(
-                  child: Container(
-                    width: 42.w,
-                    height: 52.h,
-                    margin: EdgeInsets.symmetric(horizontal: 1.w),
-                    decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1.w, color: AppColors.textLight),
-                      borderRadius: BorderRadius.circular(21.r),
-                    ),
-                    child: TextField(
-                      controller: _otpControllers[index],
-                      focusNode: _focusNodes[index],
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      maxLength: 1,
-                      style: TextStyle(
-                        fontFamily: 'Unbounded',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                      ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        counterText: '',
-                        contentPadding: EdgeInsets.zero,
-                        hintText: '○',
-                        hintStyle: TextStyle(
-                          fontSize: 14.sp,
-                          color: AppColors.textLight,
-                        ),
-                      ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 5) {
-                          _focusNodes[index + 1].requestFocus();
-                        } else if (value.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-                      },
-                    ),
-                  ),
-                );
-              }),
+              defaultPinTheme: PinTheme(
+                width: 42.w,
+                height: 52.h,
+                textStyle: TextStyle(
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                ),
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(width: 1.w, color: AppColors.inputTextBorder),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+              focusedPinTheme: PinTheme(
+                width: 42.w,
+                height: 52.h,
+                textStyle: TextStyle(
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+              onCompleted: (pin) {
+                _onVerify();
+              },
             ),
           ),
           if (_otpError != null) SizedBox(height: 4.h),
@@ -334,7 +279,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                     authProvider.sendOTP(_phoneNumber!).then((success) {
                       if (success) {
                         ToastUtils.showSuccessToast('OTP sent successfully');
-                        _startResendTimer(); // Restart timer
+                        _startResendTimer();
                       } else {
                         ToastUtils.showErrorToast(authProvider.errorMessage ??
                             'Failed to resend OTP');
@@ -420,13 +365,11 @@ class _OtpVerificationState extends State<OtpVerification> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildPasswordInputField(
-                  'Set passcode', _passwordControllers, _passwordFocusNodes),
+                  'Set passcode', _passwordController),
               SizedBox(height: 16.h),
               _buildPasswordInputField(TextConstants.confirmPasscode,
-                  _confirmPasswordControllers, _confirmPasswordFocusNodes,
+                  _confirmPasswordController,
                   errorText: _passwordError),
-              SizedBox(height: 16.h),
-              _buildForgotPasswordText(),
               SizedBox(height: 20.h),
               SizedBox(
                 width: double.infinity,
@@ -444,7 +387,7 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   Widget _buildPasswordInputField(String label,
-      List<TextEditingController> controllers, List<FocusNode> focusNodes,
+      TextEditingController controller,
       {String? errorText}) {
     return Container(
       width: double.infinity,
@@ -464,48 +407,36 @@ class _OtpVerificationState extends State<OtpVerification> {
           SizedBox(height: 8.h),
           Container(
             height: 52.h,
-            child: Row(
+            child: Pinput(
+              controller: controller,
+              length: 4,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(4, (index) {
-                return Container(
-                  width: 72.w,
-                  height: 52.h,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1.w, color: AppColors.textLight),
-                    borderRadius: BorderRadius.circular(26.r),
-                  ),
-                  child: TextField(
-                    controller: controllers[index],
-                    focusNode: focusNodes[index],
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.center,
-                    maxLength: 1,
-                    obscureText: false,
-                    style: TextStyle(
-                      fontFamily: 'Unbounded',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      counterText: '',
-                      contentPadding: EdgeInsets.zero,
-                      hintText: '○',
-                      hintStyle: TextStyle(
-                        fontSize: 16.sp,
-                        color: AppColors.textLight,
-                      ),
-                    ),
-                    onChanged: (value) {
-                      if (value.isNotEmpty && index < 3) {
-                        focusNodes[index + 1].requestFocus();
-                      } else if (value.isEmpty && index > 0) {
-                        focusNodes[index - 1].requestFocus();
-                      }
-                    },
-                  ),
-                );
-              }),
+              defaultPinTheme: PinTheme(
+                width: 72.w,
+                height: 52.h,
+                textStyle: TextStyle(
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1.w, color: AppColors.inputTextBorder),
+                  borderRadius: BorderRadius.circular(26.r),
+                ),
+              ),
+              focusedPinTheme: PinTheme(
+                width: 72.w,
+                height: 52.h,
+                textStyle: TextStyle(
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
+                  borderRadius: BorderRadius.circular(26.r),
+                ),
+              ),
             ),
           ),
           if (errorText != null) SizedBox(height: 4.h),
@@ -604,47 +535,36 @@ class _OtpVerificationState extends State<OtpVerification> {
           ),
           SizedBox(height: 4.h),
           Expanded(
-            child: Row(
+            child: Pinput(
+              controller: _enterPasscodeController,
+              length: 4,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(4, (index) {
-                return Container(
-                  width: 72.w,
-                  height: 52.h,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1.w, color: AppColors.textLight),
-                    borderRadius: BorderRadius.circular(26.r),
-                  ),
-                  child: TextField(
-                    controller: _enterPasscodeControllers[index],
-                    focusNode: _enterPasscodeFocusNodes[index],
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.center,
-                    maxLength: 1,
-                    style: TextStyle(
-                      fontFamily: 'Unbounded',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      counterText: '',
-                      contentPadding: EdgeInsets.zero,
-                      hintText: '○',
-                      hintStyle: TextStyle(
-                        fontSize: 16.sp,
-                        color: AppColors.textLight,
-                      ),
-                    ),
-                    onChanged: (value) {
-                      if (value.isNotEmpty && index < 3) {
-                        _enterPasscodeFocusNodes[index + 1].requestFocus();
-                      } else if (value.isEmpty && index > 0) {
-                        _enterPasscodeFocusNodes[index - 1].requestFocus();
-                      }
-                    },
-                  ),
-                );
-              }),
+              defaultPinTheme: PinTheme(
+                width: 72.w,
+                height: 52.h,
+                textStyle: TextStyle(
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1.w, color: AppColors.inputTextBorder),
+                  borderRadius: BorderRadius.circular(26.r),
+                ),
+              ),
+              focusedPinTheme: PinTheme(
+                width: 72.w,
+                height: 52.h,
+                textStyle: TextStyle(
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
+                  borderRadius: BorderRadius.circular(26.r),
+                ),
+              ),
             ),
           ),
         ],

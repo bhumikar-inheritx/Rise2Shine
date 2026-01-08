@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/theme/app_colors.dart';
+import '../../../core/constants/asset_constants.dart';
+import '../../../core/constants/text_constants.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
@@ -15,24 +17,24 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   final List<BottomNavItem> _navItems = const [
     BottomNavItem(
-      icon: 'assets/icons/home.png',
-      label: 'Home',
+      icon: AssetConstants.homeIcon,
+      label: TextConstants.home,
     ),
     BottomNavItem(
-      icon: 'assets/icons/chart.png',
-      label: 'Task',
+      icon: AssetConstants.taskSquare,
+      label: TextConstants.task,
     ),
     BottomNavItem(
-      icon: 'assets/icons/cup.png',
-      label: 'Rewards',
+      icon: AssetConstants.cupIcon,
+      label: TextConstants.rewards,
     ),
     BottomNavItem(
-      icon: 'assets/icons/chart.png',
-      label: 'Stats',
+      icon: AssetConstants.chartIcon,
+      label: TextConstants.stats,
     ),
     BottomNavItem(
-      icon: 'assets/icons/more.png',
-      label: 'More',
+      icon: AssetConstants.moreIcon,
+      label: TextConstants.more,
     ),
   ];
 
@@ -81,7 +83,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 item.icon,
                 width: 24.w,
                 height: 24.h,
-                color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
+                color:
+                    isSelected ? Colors.white : Colors.white.withOpacity(0.6),
               ),
               SizedBox(height: 4.h),
               FittedBox(

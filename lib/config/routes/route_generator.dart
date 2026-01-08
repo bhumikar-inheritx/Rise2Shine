@@ -45,15 +45,8 @@ class RouteGenerator {
         );
 
       case AppRoutes.otpVerificationRoute:
-        return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const OtpVerification(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return ScaleTransition(
-              scale: animation,
-              child: child,
-            );
-          },
+        return MaterialPageRoute(
+          builder: (_) => const OtpVerification(),
           settings: settings,
         );
 

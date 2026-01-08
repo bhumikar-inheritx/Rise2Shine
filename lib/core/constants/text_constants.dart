@@ -93,4 +93,15 @@ class TextConstants {
   static const selectDateOfBirth = 'Select date of birth';
   static const setChildPasscode = 'Set child passcode';
   static const addChild = 'Add child';
+  
+  // Home Screen Texts
+  static const addChilds = 'Add Child(s)';
+  static const homeContent = 'Start with adding your child and give them task to earn reward';
+  
+  // Bottom Navigation Labels
+  static const home = 'Home';
+  static const task = 'Task';
+  static const rewards = 'Rewards';
+  static const stats = 'Stats';
+  static const more = 'More';
 }

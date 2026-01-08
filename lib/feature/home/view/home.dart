@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/theme/app_colors.dart';
+import '../../../core/constants/asset_constants.dart';
+import '../../../core/constants/text_constants.dart';
+import '../../../core/widgets/custom_button.dart';
+import '../../add_child/view/add_your_child.dart';
 import '../widget/custom_bottom_navigation_bar.dart';
 
 class Home extends StatefulWidget {
@@ -20,6 +24,15 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _showAddChildBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddYourChild(isBottomSheet: true),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,7 +44,7 @@ class _HomeState extends State<Home> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            'Add Child(s)',
+            TextConstants.addChilds,
             style: TextStyle(
               fontFamily: 'Nunito',
               fontWeight: FontWeight.w600,
@@ -44,15 +57,46 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               Expanded(
-                child: Center(
-                  child: Text(
-                    'Home Content',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
+                child: Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 311.w,
+                        height: 355.h,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                AssetConstants.homePageFamily,
+                                width: 300.w,
+                                height: 238.h,
+                              ),
+                              SizedBox(height: 8.h),
+                              CustomButton(
+                                width: 213.w,
+                                text: TextConstants.addChild,
+                                fontSize: 16.sp,
+                                onPressed: () {
+                                  _showAddChildBottomSheet(context);
+                                },
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                                TextConstants.homeContent,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.sp,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               CustomBottomNavigationBar(

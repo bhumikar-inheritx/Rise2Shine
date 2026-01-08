@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../config/theme/app_colors.dart';
+import '../../config/theme/app_colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -9,14 +9,17 @@ class CustomButton extends StatelessWidget {
   final double? width;
   final double? height;
   final double? fontSize;
+  final bool isOutlined;
 
-  const CustomButton(
-      {super.key,
-      required this.text,
-      this.onPressed,
-      this.width,
-      this.height,
-      this.fontSize});
+  const CustomButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.width,
+    this.height,
+    this.fontSize,
+    this.isOutlined = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,10 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.buttonColor,
+          backgroundColor: isOutlined ? AppColors.white : AppColors.buttonColor,
+          side: isOutlined
+              ? BorderSide(color: AppColors.buttonColor, width: 1.w)
+              : null,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50.r),
           ),
@@ -34,7 +40,7 @@ class CustomButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            color: AppColors.white,
+            color: isOutlined ? AppColors.buttonColor : AppColors.white,
             fontSize: fontSize,
             fontFamily: 'Unbounded',
             fontWeight: FontWeight.w400,

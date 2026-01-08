@@ -9,7 +9,8 @@ import '../../../core/constants/asset_constants.dart';
 import '../../../core/constants/text_constants.dart';
 import '../../../core/utils/toast_util.dart';
 import '../../../core/utils/validation_utils.dart';
-import '../../profile_selection/widget/custom_button.dart';
+import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_text_field.dart';
 import '../provider/auth_provider.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -187,8 +188,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 height: 51.h,
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1.w, color: AppColors.textLight),
-                  borderRadius: BorderRadius.circular(12.r),
+                  border:
+                      Border.all(width: 1.w, color: AppColors.inputTextBorder),
+                  borderRadius: BorderRadius.circular(100.r),
                 ),
                 child: Center(
                   child: FittedBox(
@@ -206,22 +208,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
               SizedBox(width: 8.w),
               Expanded(
-                child: TextField(
+                child: CustomTextField(
                   controller: controller,
+                  hintText: hint,
+                  errorText: errorText,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    hintText: hint,
-                    hintStyle: TextStyle(
-                        fontFamily: 'Unbounded',
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.textLight),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                      borderSide:
-                          BorderSide(width: 1.w, color: AppColors.textLight),
-                    ),
-                  ),
+                  width: 224.w,
                 ),
               ),
             ],

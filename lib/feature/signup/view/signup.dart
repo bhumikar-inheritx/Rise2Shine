@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +11,8 @@ import '../../../core/constants/text_constants.dart';
 import '../../../core/utils/responsive_helper.dart';
 import '../../../core/utils/toast_util.dart';
 import '../../../core/utils/validation_utils.dart';
-import '../../profile_selection/widget/custom_button.dart';
+import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_text_field.dart';
 import '../provider/auth_provider.dart';
 
 class Signup extends StatefulWidget {
@@ -47,7 +49,9 @@ class _SignupState extends State<Signup> {
     setState(() {
       _fullNameError = _fullNameController.text.isEmpty
           ? TextConstants.fullNameRequired
-          : ValidationUtils.validateFullName(_fullNameController.text);
+          : _fullNameController.text.length > 20
+              ? 'Full name cannot exceed 20 characters'
+              : ValidationUtils.validateFullName(_fullNameController.text);
 
       _phoneError = _phoneController.text.isEmpty
           ? TextConstants.phoneNumberRequired
@@ -93,9 +97,16 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) {
+          exit(0);
+        }
+      },
+      child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
           resizeToAvoidBottomInset: true,
           body: Stack(
             children: [
@@ -115,7 +126,7 @@ class _SignupState extends State<Signup> {
                     maxWidth: 400.w,
                     minHeight: _hasValidationErrors ? 380.h : 330.h,
                   ),
-                  padding: ResponsiveHelper.safePadding(),
+                  padding: EdgeInsets.all(32.w),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(50.r),
@@ -153,7 +164,8 @@ class _SignupState extends State<Signup> {
               ),
             ],
           ),
-        ));
+        )),
+    );
   }
 
   Widget _buildPhoneInputField(
@@ -185,7 +197,8 @@ class _SignupState extends State<Signup> {
                 height: 51.h,
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1.w, color: AppColors.textLight),
+                  border:
+                      Border.all(width: 1.w, color: AppColors.inputTextBorder),
                   borderRadius: BorderRadius.circular(100.r),
                 ),
                 child: Center(
@@ -204,22 +217,19 @@ class _SignupState extends State<Signup> {
               ),
               SizedBox(width: 4.w),
               Expanded(
-                child: TextField(
+                child: CustomTextField(
                   controller: controller,
+                  hintText: hint,
+                  errorText: errorText,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    hintText: hint,
-                    hintStyle: TextStyle(
-                        fontFamily: 'Unbounded',
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.textLight),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.r),
-                      borderSide:
-                          BorderSide(width: 1.w, color: AppColors.textLight),
-                    ),
-                  ),
+                  width: 224.w,
+                  onChanged: (value) {
+                    setState(() {
+                      _phoneError = value.isEmpty
+                          ? TextConstants.phoneNumberRequired
+                          : ValidationUtils.validatePhoneNumber(value);
+                    });
+                  },
                 ),
               ),
             ],
@@ -262,21 +272,24 @@ class _SignupState extends State<Signup> {
             ),
           ),
           SizedBox(height: 4.h),
-          TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: TextStyle(
-                  fontFamily: 'Unbounded',
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textLight),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100.r),
-                borderSide: BorderSide(width: 1.w, color: AppColors.textLight),
-              ),
-            ),
-          ),
+                  CustomTextField(
+                    controller: controller,
+                    hintText: hint,
+                    errorText: errorText,
+                    onChanged: (value) {
+                      setState(() {
+                        if (controller == _fullNameController) {
+                          if (value.isEmpty) {
+                            _fullNameError = TextConstants.fullNameRequired;
+                          } else if (value.length > 20) {
+                            _fullNameError = 'Full name cannot exceed 20 characters';
+                          } else {
+                            _fullNameError = ValidationUtils.validateFullName(value);
+                          }
+                        }
+                      });
+                    },
+                  ),
           if (errorText != null) SizedBox(height: 4.h),
           if (errorText != null)
             Text(

@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../config/theme/app_colors.dart';
 import '../../../core/constants/asset_constants.dart';
 import '../../../core/constants/text_constants.dart';
-import '../widget/custom_button.dart';
+import '../../../core/widgets/custom_button.dart';
 
 class ProfileSelection extends StatefulWidget {
   const ProfileSelection({super.key});
