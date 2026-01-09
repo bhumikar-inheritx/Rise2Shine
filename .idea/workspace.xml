@@ -10,13 +10,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cbeb48a-b455-4602-a7e1-3a2573c52cd5" name="Changes" comment="(Onboarding) , including Firebase Authentication, OTP verification, and FCM integration.">
-      <change beforePath="$PROJECT_DIR$/.dart_tool/extension_discovery/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/extension_discovery/devtools.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/icons/ic_reward.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/icons/ic_sorting.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/empty_tasks.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_1.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_3.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_4.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_5.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_6.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_7.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/user_avatar_8.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/widgets/task_card_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/feature/parent_task/page/parent_tasks_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/feature/parent_task/widget/bottom_sheets/add_task_bottom_sheet.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Rise2Shine.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Rise2Shine.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/last_build_run.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/config/theme/app_colors.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/config/theme/app_colors.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/config/theme/app_theme.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/config/theme/app_theme.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/constants/app_constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/constants/app_constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/constants/asset_constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/constants/asset_constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/feature/home/view/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/feature/home/view/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/feature/home/widget/custom_bottom_navigation_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/widgets/custom_bottom_navigation_bar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,8 +76,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Dart File" />
         <option value="valueResourceFile" />
+        <option value="Dart File" />
       </list>
     </option>
   </component>
@@ -93,48 +117,48 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Flutter.main.dart.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "io.flutter.reload.alreadyRun": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/bhumika/Desktop/Rise2Shine/ios/Runner",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "layout.inspector",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev__ahmed&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/aehmadraza/Desktop/projects/Rise2Shine/assets/icons&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   },
-  "keyToStringList": {
-    "kotlin-gradle-user-dirs": [
-      "/Users/bhumika/.gradle"
+  &quot;keyToStringList&quot;: {
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;/Users/bhumika/.gradle&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReadonlyStatusHandler">
     <option name="SHOW_DIALOG" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/ios/Runner" />
-      <recent name="$PROJECT_DIR$/assets/images" />
       <recent name="$PROJECT_DIR$/assets/icons" />
+      <recent name="$PROJECT_DIR$/assets/images" />
+      <recent name="$PROJECT_DIR$/ios/Runner" />
       <recent name="$PROJECT_DIR$/android/app" />
       <recent name="$PROJECT_DIR$/lib/feature/signup" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/images" />
       <recent name="$PROJECT_DIR$/assets/icons" />
       <recent name="$PROJECT_DIR$/lib/core/widgets" />
       <recent name="$PROJECT_DIR$/ios/Runner" />
       <recent name="$PROJECT_DIR$/android/app" />
-      <recent name="$PROJECT_DIR$/android/app/src/main/java/com/inx" />
     </key>
   </component>
   <component name="RunManager">
@@ -220,6 +244,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
     <MESSAGE value="Rise to shine" />
     <MESSAGE value="profile selection" />
     <MESSAGE value="profile selection 1" />

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_structure/config/theme/app_theme.dart';
 
 import 'config/routes/app_routes.dart';
 import 'config/routes/route_generator.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
               title: 'Rise2Shine',
               debugShowCheckedModeBanner: false,
               themeMode: themeProvider.themeMode,
+              theme: AppTheme.lightTheme,
               scaffoldMessengerKey: ToastUtils.key,
               onGenerateRoute: RouteGenerator.generateRoute,
               initialRoute: AppRoutes.splashRoute,

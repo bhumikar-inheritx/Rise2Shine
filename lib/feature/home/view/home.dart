@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider_structure/feature/parent_task/page/parent_tasks_page.dart';
 
 import '../../../config/theme/app_colors.dart';
 import '../../../core/constants/asset_constants.dart';
 import '../../../core/constants/text_constants.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../add_child/view/add_your_child.dart';
-import '../widget/custom_bottom_navigation_bar.dart';
+import '../../../core/widgets/custom_bottom_navigation_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,6 +18,24 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    SizedBox(),
+    ParentTasksPage(),
+    SizedBox(),
+    SizedBox(),
+    SizedBox(),
+  ];
+
+  String _getPageTitle() =>
+      switch(_selectedIndex){
+      0 => TextConstants.home,
+      1 => TextConstants.task,
+      2 => TextConstants.rewards,
+      3 => TextConstants.stats,
+      4 => TextConstants.more,
+      _ => ""
+      };
 
   void _onItemTapped(int index) {
     setState(() {
@@ -38,13 +57,12 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.textWhite,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
           title: Text(
-            TextConstants.addChilds,
+            _getPageTitle(),
             style: TextStyle(
               fontFamily: 'Nunito',
               fontWeight: FontWeight.w600,
@@ -54,54 +72,59 @@ class _HomeState extends State<Home> {
           ),
         ),
         body: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 311.w,
-                        height: 355.h,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                AssetConstants.homePageFamily,
-                                width: 300.w,
-                                height: 238.h,
-                              ),
-                              SizedBox(height: 8.h),
-                              CustomButton(
-                                width: 213.w,
-                                text: TextConstants.addChild,
-                                fontSize: 16.sp,
-                                onPressed: () {
-                                  _showAddChildBottomSheet(context);
-                                },
-                              ),
-                              SizedBox(height: 8.h),
-                              Text(
-                                TextConstants.homeContent,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Nunito',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16.sp,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              IndexedStack(
+                index: _selectedIndex,
+                children: _pages,
               ),
-              CustomBottomNavigationBar(
-                selectedIndex: _selectedIndex,
-                onItemTapped: _onItemTapped,
+              // Stack(
+              //   children: [
+              //     Center(
+              //       child: Container(
+              //         width: 311.w,
+              //         height: 355.h,
+              //         child: SingleChildScrollView(
+              //           child: Column(
+              //             children: [
+              //               Image.asset(
+              //                 AssetConstants.homePageFamily,
+              //                 width: 300.w,
+              //                 height: 238.h,
+              //               ),
+              //               SizedBox(height: 8.h),
+              //               CustomButton(
+              //                 width: 213.w,
+              //                 text: TextConstants.addChild,
+              //                 fontSize: 16.sp,
+              //                 onPressed: () {
+              //                   _showAddChildBottomSheet(context);
+              //                 },
+              //               ),
+              //               SizedBox(height: 8.h),
+              //               Text(
+              //                 TextConstants.homeContent,
+              //                 textAlign: TextAlign.center,
+              //                 style: TextStyle(
+              //                   fontFamily: 'Nunito',
+              //                   fontWeight: FontWeight.w600,
+              //                   fontSize: 16.sp,
+              //                   color: AppColors.textSecondary,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: CustomBottomNavigationBar(
+                  selectedIndex: _selectedIndex,
+                  onItemTapped: _onItemTapped,
+                ),
               ),
             ],
           ),

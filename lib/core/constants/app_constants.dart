@@ -1,5 +1,9 @@
 class AppConstants {
 
+  // Font-families
+  static const unboundedFont ="Unbounded";
+  static const nunitoFont ="Nunito";
+
   // Animation Durations
   static const defaultAnimationDuration = Duration(milliseconds: 300);
 

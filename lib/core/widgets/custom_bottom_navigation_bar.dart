@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../config/theme/app_colors.dart';
-import '../../../core/constants/asset_constants.dart';
-import '../../../core/constants/text_constants.dart';
+import '../../config/theme/app_colors.dart';
+import '../constants/asset_constants.dart';
+import '../constants/text_constants.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
@@ -72,6 +72,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
     return Flexible(
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () => onItemTapped(index),
         child: Container(
           height: 52.h,
