@@ -9,6 +9,8 @@ import 'config/routes/route_generator.dart';
 import 'config/theme/theme_provider.dart';
 import 'core/base/base_provider.dart';
 import 'core/base/locale_provider.dart';
+import 'core/providers/bottom_navigation_provider.dart';
+import 'core/providers/parent_provider.dart';
 import 'core/services/fcm_service.dart';
 import 'core/utils/toast_util.dart';
 import 'feature/signup/provider/auth_provider.dart';
@@ -22,7 +24,7 @@ Future<void> main() async {
   // Set status bar to white
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
+      statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.light,
     ),
@@ -63,6 +65,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ParentProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BottomNavigationProvider(),
         ),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../core/services/firebase_auth_service.dart';
+import '../../../core/services/passcode_service.dart';
+import '../../../core/services/shared_preferences_service.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
@@ -35,6 +37,8 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  String? _lastPhoneNumber; // Store phone number for later use
+
   Future<bool> sendOTP(String phoneNumber) async {
     print('📱 AuthProvider: Starting sendOTP for $phoneNumber');
     _setLoading(true);
@@ -42,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       String formattedPhone = _formatPhoneNumber(phoneNumber);
+      _lastPhoneNumber = formattedPhone; // Store for later use
       print('📱 AuthProvider: Formatted phone: $formattedPhone');
       bool success = await FirebaseAuthService.sendOTP(formattedPhone);
 
@@ -76,6 +81,10 @@ class AuthProvider extends ChangeNotifier {
         print('📱 AuthProvider: OTP verified successfully');
         _user = result?.user;
         _status = AuthStatus.authenticated;
+        
+        // Save login state to SharedPreferences
+        await _saveLoginStateToPreferences();
+        
         _setLoading(false);
         return true;
       } else {
@@ -89,6 +98,41 @@ class AuthProvider extends ChangeNotifier {
       _setError(_getErrorMessage(e));
       _setLoading(false);
       return false;
+    }
+  }
+
+  // Save login state to SharedPreferences
+  Future<void> _saveLoginStateToPreferences() async {
+    try {
+      // Save login state
+      await SharedPreferencesService.saveLoginState(true);
+      
+      // Save user UID if available
+      if (_user?.uid != null) {
+        await SharedPreferencesService.saveUserId(_user!.uid);
+        print('✅ AuthProvider: Saved user UID to SharedPreferences: ${_user!.uid}');
+      } else {
+        // For test mode, generate a temporary UID based on phone number
+        if (_lastPhoneNumber != null) {
+          String testUid = 'test_${_lastPhoneNumber!.replaceAll(RegExp(r'[^\d]'), '')}';
+          await SharedPreferencesService.saveUserId(testUid);
+          print('✅ AuthProvider: Saved test UID to SharedPreferences: $testUid');
+        }
+      }
+      
+      // Save phone number if available
+      if (_lastPhoneNumber != null) {
+        await SharedPreferencesService.saveUserPhone(_lastPhoneNumber!);
+        print('✅ AuthProvider: Saved user phone to SharedPreferences: $_lastPhoneNumber');
+      }
+      
+      // Save login timestamp
+      String timestamp = DateTime.now().toIso8601String();
+      await SharedPreferencesService.saveLoginTimestamp(timestamp);
+      
+      print('✅ AuthProvider: Login state saved to SharedPreferences');
+    } catch (e) {
+      print('❌ AuthProvider: Error saving login state to SharedPreferences - $e');
     }
   }
 
@@ -120,11 +164,43 @@ class AuthProvider extends ChangeNotifier {
       await FirebaseAuthService.signOut();
       _user = null;
       _status = AuthStatus.unauthenticated;
+      _lastPhoneNumber = null;
+      
+      // Clear login data from SharedPreferences
+      await SharedPreferencesService.clearLoginData();
+      
+      // Clear passcode session
+      await PasscodeService.clearSession();
+      
+      print('✅ AuthProvider: Login data and passcode session cleared');
     } catch (e) {
       _setError(_getErrorMessage(e));
     }
 
     _setLoading(false);
+  }
+
+  // Check login state from SharedPreferences
+  Future<bool> checkLoginState() async {
+    try {
+      bool isLoggedIn = await SharedPreferencesService.isUserLoggedIn();
+      if (isLoggedIn) {
+        String? savedUid = await SharedPreferencesService.getUserId();
+        String? savedPhone = await SharedPreferencesService.getUserPhone();
+        print('✅ AuthProvider: User is logged in (UID: $savedUid, Phone: $savedPhone)');
+        _status = AuthStatus.authenticated;
+      } else {
+        print('ℹ️ AuthProvider: User is not logged in');
+        _status = AuthStatus.unauthenticated;
+      }
+      notifyListeners();
+      return isLoggedIn;
+    } catch (e) {
+      print('❌ AuthProvider: Error checking login state - $e');
+      _status = AuthStatus.unauthenticated;
+      notifyListeners();
+      return false;
+    }
   }
 
   String _formatPhoneNumber(String phoneNumber) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../feature/add_child/view/add_your_child.dart';
 import '../../feature/home/view/home.dart';
+import '../../feature/passcode/view/enter_passcode_screen.dart';
 import '../../feature/profile_selection/view/profile_selection.dart';
 import '../../feature/signup/view/forgot_password.dart';
 import '../../feature/signup/view/otp_verification.dart';
@@ -84,6 +85,11 @@ class RouteGenerator {
               child: child,
             );
           },
+        );
+
+      case AppRoutes.passcodeEntryRoute:
+        return MaterialPageRoute(
+          builder: (_) => const EnterPasscodeScreen(),
         );
 
       default:

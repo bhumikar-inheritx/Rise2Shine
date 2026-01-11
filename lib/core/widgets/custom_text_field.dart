@@ -46,21 +46,23 @@ class CustomTextField extends StatelessWidget {
         maxLength: maxLength,
         style: TextStyle(
           fontFamily: 'Unbounded',
-          fontSize: 18.sp,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
             fontFamily: 'Unbounded',
-            fontSize: 18.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
             color: AppColors.textLight,
           ),
-          suffixIcon: suffixIcon != null ? Padding(
-            padding: EdgeInsets.only(right: 12.w),
-            child: suffixIcon,
-          ) : null,
+          suffixIcon: suffixIcon != null
+              ? Padding(
+                  padding: EdgeInsets.only(right: 12.w),
+                  child: suffixIcon,
+                )
+              : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(100.r),
             borderSide: BorderSide(
@@ -83,7 +85,8 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
           counterText: '',
-          contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
         ),
       ),
     );

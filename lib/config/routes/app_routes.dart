@@ -10,4 +10,5 @@ class AppRoutes {
   static const loginRoute = '/login';
   static const profileRoute = '/profile';
   static const todoRoute = '/todo';
+  static const passcodeEntryRoute = '/passcode-entry';
 }

@@ -41,14 +41,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: 392.w,
       height: 76.h,
       margin: EdgeInsets.only(
-        bottom: 24.h,
         left: 24.w,
         right: 24.w,
+        bottom: MediaQuery.of(context).padding.bottom,
       ),
-      padding: EdgeInsets.symmetric(vertical: 12.h),
+      padding: EdgeInsets.symmetric(
+        vertical: 12.h,
+      ),
       decoration: BoxDecoration(
         color: AppColors.primaryColor,
         borderRadius: BorderRadius.circular(50.r),
@@ -70,37 +72,47 @@ class CustomBottomNavigationBar extends StatelessWidget {
     final isSelected = selectedIndex == index;
     final item = _navItems[index];
 
-    return Flexible(
+    return Expanded(
       child: GestureDetector(
         onTap: () => onItemTapped(index),
-        child: Container(
-          height: 52.h,
-          padding: EdgeInsets.symmetric(horizontal: 4.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                item.icon,
-                width: 24.w,
-                height: 24.h,
-                color:
-                    isSelected ? Colors.white : Colors.white.withOpacity(0.6),
-              ),
-              SizedBox(height: 4.h),
-              FittedBox(
-                child: Text(
-                  item.label,
-                  style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12.sp,
-                    color: isSelected
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.6),
+        child: ClipRect(
+          child: Container(
+            height: 52.h,
+            padding: EdgeInsets.symmetric(horizontal: 2.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  item.icon,
+                  width: 24.w,
+                  height: 24.h,
+                  fit: BoxFit.contain,
+                  color:
+                      isSelected ? Colors.white : Colors.white.withOpacity(0.6),
+                ),
+                SizedBox(height: 4.h),
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      item.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.sp,
+                        color: isSelected
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.6),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

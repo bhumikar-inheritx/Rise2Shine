@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double? fontSize;
   final bool isOutlined;
+  final bool isLoading;
 
   const CustomButton({
     super.key,
@@ -19,6 +20,7 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.fontSize,
     this.isOutlined = false,
+    this.isLoading = false,
   });
 
   @override
@@ -27,7 +29,7 @@ class CustomButton extends StatelessWidget {
       width: width ?? double.infinity,
       height: height ?? 56.h,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: isOutlined ? AppColors.white : AppColors.buttonColor,
           side: isOutlined
@@ -36,16 +38,30 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50.r),
           ),
+          disabledBackgroundColor: isOutlined 
+              ? AppColors.white.withValues(alpha: 0.7)
+              : AppColors.buttonColor.withValues(alpha: 0.7),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isOutlined ? AppColors.buttonColor : AppColors.white,
-            fontSize: fontSize,
-            fontFamily: 'Unbounded',
-            fontWeight: FontWeight.w400,
-          ),
-        ),
+        child: isLoading
+            ? SizedBox(
+                width: 20.w,
+                height: 20.h,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.w,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    isOutlined ? AppColors.buttonColor : AppColors.white,
+                  ),
+                ),
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                  color: isOutlined ? AppColors.buttonColor : AppColors.white,
+                  fontSize: fontSize,
+                  fontFamily: 'Unbounded',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
       ),
     );
   }

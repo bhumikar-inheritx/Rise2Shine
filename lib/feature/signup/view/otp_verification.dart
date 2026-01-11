@@ -8,8 +8,11 @@ import '../../../config/routes/app_routes.dart';
 import '../../../config/theme/app_colors.dart';
 import '../../../core/constants/asset_constants.dart';
 import '../../../core/constants/text_constants.dart';
+import '../../../core/services/passcode_service.dart';
+import '../../../core/services/shared_preferences_service.dart';
 import '../../../core/utils/toast_util.dart';
 import '../../../core/widgets/custom_button.dart';
+import '../../../core/providers/parent_provider.dart';
 import '../provider/auth_provider.dart';
 
 class OtpVerification extends StatefulWidget {
@@ -23,23 +26,20 @@ class _OtpVerificationState extends State<OtpVerification> {
   final TextEditingController _pinController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  final TextEditingController _enterPasscodeController = TextEditingController();
   String? _otpError;
   String? _passwordError;
-  String? _enterPasscodeError;
   bool _showSetPassword = false;
-  bool _showEnterPasscode = false;
   String? _phoneNumber;
   String? _fullName;
   bool _isPasswordReset = false;
   String? _savedPasscode;
+  bool _isSettingPasscode = false;
 
   int _resendTimer = 60;
   bool _canResend = false;
 
   bool get _hasValidationError => _otpError != null;
   bool get _hasPasswordError => _passwordError != null;
-  bool get _hasEnterPasscodeError => _enterPasscodeError != null;
 
   @override
   void didChangeDependencies() {
@@ -83,7 +83,6 @@ class _OtpVerificationState extends State<OtpVerification> {
     _pinController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _enterPasscodeController.dispose();
     super.dispose();
   }
 
@@ -145,29 +144,68 @@ class _OtpVerificationState extends State<OtpVerification> {
     return !_hasPasswordError;
   }
 
-  void _onSetPasscode() {
-    if (_validatePasswords()) {
-      _savedPasscode = _passwordController.text;
-      setState(() {
-        _showEnterPasscode = true;
-        _showSetPassword = false;
-      });
+  Future<void> _onSetPasscode() async {
+    if (!_validatePasswords()) {
+      return;
     }
-  }
-
-  void _onEnterPasscode() {
-    final enteredPasscode = _enterPasscodeController.text;
 
     setState(() {
-      if (enteredPasscode.length < 4) {
-        _enterPasscodeError = 'Please enter complete passcode';
-      } else if (enteredPasscode != _savedPasscode) {
-        _enterPasscodeError = TextConstants.passcodeWrong;
-      } else {
-        _enterPasscodeError = null;
-        Navigator.pushNamed(context, AppRoutes.addChildRoute);
-      }
+      _isSettingPasscode = true;
+      _savedPasscode = _passwordController.text;
     });
+
+    // Save passcode using PasscodeService
+    try {
+      final passcodeSaved = await PasscodeService.savePasscode(_savedPasscode!);
+      if (!passcodeSaved) {
+        if (mounted) {
+          setState(() {
+            _isSettingPasscode = false;
+          });
+          ToastUtils.showErrorToast('Failed to save passcode');
+        }
+        return;
+      }
+
+      // Create parent document in Firestore
+      if (!mounted) return;
+      
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final parentProvider = Provider.of<ParentProvider>(context, listen: false);
+      
+      String? userId = authProvider.user?.uid;
+      if (userId == null) {
+        userId = await SharedPreferencesService.getUserId();
+      }
+
+      if (userId != null && _fullName != null && _phoneNumber != null) {
+        // Create parent document
+        final parentCreated = await parentProvider.createParent(
+          parentId: userId,
+          fullName: _fullName!,
+          phoneNumber: _phoneNumber!,
+        );
+
+        if (parentCreated) {
+          // Update passcode status in Firestore
+          await parentProvider.updatePasscodeStatus(true);
+          // Create session
+          await PasscodeService.createSession();
+        }
+      }
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.addChildRoute);
+      }
+    } catch (e) {
+      print('❌ OTP Verification: Error saving passcode - $e');
+      if (mounted) {
+        setState(() {
+          _isSettingPasscode = false;
+        });
+        ToastUtils.showErrorToast('Error saving passcode');
+      }
+    }
   }
 
   @override
@@ -187,11 +225,9 @@ class _OtpVerificationState extends State<OtpVerification> {
                   height: double.infinity,
                 ),
               ),
-              _showEnterPasscode
-                  ? _buildEnterPasscodeContainer()
-                  : _showSetPassword
-                      ? _buildSetPasswordContainer()
-                      : _buildOtpContainer(),
+              _showSetPassword
+                  ? _buildSetPasswordContainer()
+                  : _buildOtpContainer(),
             ],
           ),
         ));
@@ -377,6 +413,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                   text: 'Set passcode',
                   fontSize: 16.sp,
                   onPressed: _onSetPasscode,
+                  isLoading: _isSettingPasscode,
                 ),
               ),
             ],
@@ -450,123 +487,6 @@ class _OtpVerificationState extends State<OtpVerification> {
                 color: Colors.red,
               ),
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildForgotPasswordText() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, AppRoutes.forgotPasswordRoute);
-      },
-      child: const Text(
-        TextConstants.forgotPasscode,
-        style: TextStyle(
-          fontFamily: 'Nunito',
-          fontWeight: FontWeight.w700,
-          fontSize: 16,
-          color: AppColors.primaryColor,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  Widget _buildEnterPasscodeContainer() {
-    return Center(
-      child: Container(
-        width: 376.w,
-        height: _hasEnterPasscodeError ? 300.h : 269.h,
-        padding: EdgeInsets.all(32.w),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(50.r),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildEnterPasscodeInputField(),
-              if (_enterPasscodeError != null) SizedBox(height: 8.h),
-              if (_enterPasscodeError != null)
-                Text(
-                  _enterPasscodeError!,
-                  style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14.sp,
-                    color: Colors.red,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              SizedBox(height: 20.h),
-              _buildForgotPasswordText(),
-              SizedBox(height: 20.h),
-              CustomButton(
-                text: 'Set passcode',
-                width: 312.w,
-                height: 54.h,
-                fontSize: 16.sp,
-                onPressed: _onEnterPasscode,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEnterPasscodeInputField() {
-    return SizedBox(
-      width: 312.w,
-      height: 79.h,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            TextConstants.enterPasscode,
-            style: TextStyle(
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.w800,
-              fontSize: 16.sp,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Expanded(
-            child: Pinput(
-              controller: _enterPasscodeController,
-              length: 4,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              defaultPinTheme: PinTheme(
-                width: 72.w,
-                height: 52.h,
-                textStyle: TextStyle(
-                  fontFamily: 'Unbounded',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.sp,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1.w, color: AppColors.inputTextBorder),
-                  borderRadius: BorderRadius.circular(26.r),
-                ),
-              ),
-              focusedPinTheme: PinTheme(
-                width: 72.w,
-                height: 52.h,
-                textStyle: TextStyle(
-                  fontFamily: 'Unbounded',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.sp,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
-                  borderRadius: BorderRadius.circular(26.r),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

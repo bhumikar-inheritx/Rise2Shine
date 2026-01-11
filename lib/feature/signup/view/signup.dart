@@ -107,64 +107,64 @@ class _SignupState extends State<Signup> {
       child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: Stack(
-            children: [
-              Container(
-                color: AppColors.primaryColor,
-                child: SvgPicture.asset(
-                  AssetConstants.bgSignupOptions,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-              Center(
-                child: Container(
-                  width: ResponsiveHelper.containerWidth(),
-                  constraints: BoxConstraints(
-                    maxWidth: 400.w,
-                    minHeight: _hasValidationErrors ? 380.h : 330.h,
-                  ),
-                  padding: EdgeInsets.all(32.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(50.r),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildInputField(
-                        TextConstants.fullName,
-                        _fullNameController,
-                        TextConstants.enterFullName,
-                        errorText: _fullNameError,
-                      ),
-                      SizedBox(height: 16.h),
-                      _buildPhoneInputField(
-                        TextConstants.phoneNumber,
-                        _phoneController,
-                        TextConstants.enterPhoneNumber,
-                        errorText: _phoneError,
-                      ),
-                      SizedBox(height: 24.h),
-                      Consumer<AuthProvider>(
-                        builder: (context, authProvider, _) {
-                          return CustomButton(
-                            text: TextConstants.submit,
-                            fontSize: 16.sp,
-                            onPressed:
-                                authProvider.isLoading ? null : _onSubmit,
-                          );
-                        },
-                      ),
-                    ],
+            resizeToAvoidBottomInset: true,
+            body: Stack(
+              children: [
+                Container(
+                  color: AppColors.primaryColor,
+                  child: SvgPicture.asset(
+                    AssetConstants.bgSignupOptions,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
                 ),
-              ),
-            ],
-          ),
-        )),
+                Center(
+                  child: Container(
+                    width: ResponsiveHelper.containerWidth(),
+                    constraints: BoxConstraints(
+                      maxWidth: 400.w,
+                      minHeight: _hasValidationErrors ? 380.h : 330.h,
+                    ),
+                    padding: EdgeInsets.all(32.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(50.r),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildInputField(
+                          TextConstants.fullName,
+                          _fullNameController,
+                          TextConstants.enterFullName,
+                          errorText: _fullNameError,
+                        ),
+                        SizedBox(height: 16.h),
+                        _buildPhoneInputField(
+                          TextConstants.phoneNumber,
+                          _phoneController,
+                          TextConstants.enterPhoneNumber,
+                          errorText: _phoneError,
+                        ),
+                        SizedBox(height: 24.h),
+                        Consumer<AuthProvider>(
+                          builder: (context, authProvider, _) {
+                            return CustomButton(
+                              text: TextConstants.submit,
+                              fontSize: 16.sp,
+                              onPressed:
+                                  authProvider.isLoading ? null : _onSubmit,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 
@@ -207,7 +207,7 @@ class _SignupState extends State<Signup> {
                       TextConstants.phoneCode,
                       style: TextStyle(
                         fontFamily: 'Unbounded',
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textPrimary,
                       ),
@@ -272,24 +272,24 @@ class _SignupState extends State<Signup> {
             ),
           ),
           SizedBox(height: 4.h),
-                  CustomTextField(
-                    controller: controller,
-                    hintText: hint,
-                    errorText: errorText,
-                    onChanged: (value) {
-                      setState(() {
-                        if (controller == _fullNameController) {
-                          if (value.isEmpty) {
-                            _fullNameError = TextConstants.fullNameRequired;
-                          } else if (value.length > 20) {
-                            _fullNameError = 'Full name cannot exceed 20 characters';
-                          } else {
-                            _fullNameError = ValidationUtils.validateFullName(value);
-                          }
-                        }
-                      });
-                    },
-                  ),
+          CustomTextField(
+            controller: controller,
+            hintText: hint,
+            errorText: errorText,
+            onChanged: (value) {
+              setState(() {
+                if (controller == _fullNameController) {
+                  if (value.isEmpty) {
+                    _fullNameError = TextConstants.fullNameRequired;
+                  } else if (value.length > 20) {
+                    _fullNameError = 'Full name cannot exceed 20 characters';
+                  } else {
+                    _fullNameError = ValidationUtils.validateFullName(value);
+                  }
+                }
+              });
+            },
+          ),
           if (errorText != null) SizedBox(height: 4.h),
           if (errorText != null)
             Text(
