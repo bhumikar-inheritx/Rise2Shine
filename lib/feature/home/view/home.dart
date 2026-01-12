@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider_structure/core/constants/app_constants.dart';
 import 'package:provider_structure/feature/parent_task/page/parent_tasks_page.dart';
 
 import '../../../config/theme/app_colors.dart';
@@ -27,15 +28,7 @@ class _HomeState extends State<Home> {
     SizedBox(),
   ];
 
-  String _getPageTitle() =>
-      switch(_selectedIndex){
-      0 => TextConstants.home,
-      1 => TextConstants.task,
-      2 => TextConstants.rewards,
-      3 => TextConstants.stats,
-      4 => TextConstants.more,
-      _ => ""
-      };
+  String _getPageTitle() => switch (_selectedIndex) { 0 => TextConstants.home, 1 => TextConstants.task, 2 => TextConstants.rewards, 3 => TextConstants.stats, 4 => TextConstants.more, _ => "" };
 
   void _onItemTapped(int index) {
     setState(() {
@@ -64,9 +57,9 @@ class _HomeState extends State<Home> {
           title: Text(
             _getPageTitle(),
             style: TextStyle(
-              fontFamily: 'Nunito',
+              fontFamily: AppConstants.nunitoFont,
               fontWeight: FontWeight.w600,
-              fontSize: 20.sp,
+              fontSize: 20,
               color: AppColors.textPrimary,
             ),
           ),
@@ -124,6 +117,7 @@ class _HomeState extends State<Home> {
                 child: CustomBottomNavigationBar(
                   selectedIndex: _selectedIndex,
                   onItemTapped: _onItemTapped,
+                  floatingAction: _buildFloatingActionWidget(),
                 ),
               ),
             ],
@@ -132,4 +126,12 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  Widget? _buildFloatingActionWidget() => switch (_selectedIndex) {
+        1 => CustomButton(
+            margin: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            text: TextConstants.addNewTask,
+          ),
+        _ => null
+      };
 }

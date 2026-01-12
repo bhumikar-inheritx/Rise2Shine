@@ -8,11 +8,13 @@ import '../constants/text_constants.dart';
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
+  final Widget? floatingAction;
 
   const CustomBottomNavigationBar({
     super.key,
     required this.selectedIndex,
     required this.onItemTapped,
+    this.floatingAction,
   });
 
   final List<BottomNavItem> _navItems = const [
@@ -40,29 +42,36 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 76.h,
-      margin: EdgeInsets.only(
-        bottom: 24.h,
-        left: 24.w,
-        right: 24.w,
-      ),
-      padding: EdgeInsets.symmetric(vertical: 12.h),
-      decoration: BoxDecoration(
-        color: AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(50.r),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.2),
-          width: 1.w,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if(floatingAction != null) floatingAction!,
+        Container(
+          width: double.infinity,
+          height: 76.h,
+          margin: EdgeInsets.only(
+            bottom: 24.h,
+            left: 24.w,
+            right: 24.w,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColor,
+            borderRadius: BorderRadius.circular(50.r),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1.w,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(_navItems.length, (index) {
+              return _buildNavItem(index);
+            }),
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(_navItems.length, (index) {
-          return _buildNavItem(index);
-        }),
-      ),
+      ],
     );
   }
 
@@ -84,8 +93,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 item.icon,
                 width: 24.w,
                 height: 24.h,
-                color:
-                    isSelected ? Colors.white : Colors.white.withOpacity(0.6),
+                color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
               ),
               SizedBox(height: 4.h),
               FittedBox(
@@ -95,9 +103,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     fontFamily: 'Nunito',
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
-                    color: isSelected
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.6),
+                    color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
                   ),
                 ),
               ),

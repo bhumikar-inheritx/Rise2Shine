@@ -19,6 +19,7 @@ class AssetConstants {
   static const moreIcon = '${iconsPath}more.png';
   static const taskSquare = '${iconsPath}task-square.png';
   static const rewardIcon = '${iconsPath}ic_reward.svg';
+  static const verticalMoreIcon = '${iconsPath}ic_more.svg';
 
   // User avatars
   static const userAvatarSvg1 = "${imagesPath}user_avatar_1.svg";
