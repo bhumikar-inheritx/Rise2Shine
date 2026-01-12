@@ -97,7 +97,8 @@ class TextConstants {
   // Home Screen Texts
   static const addChilds = 'Add Child(s)';
   static const homeContent = 'Start with adding your child and give them task to earn reward';
-  
+  static const addNewTask = 'Add new task';
+
   // Bottom Navigation Labels
   static const home = 'Home';
   static const task = 'Task';

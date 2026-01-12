@@ -15,16 +15,13 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case AppRoutes.initialRoute:
-      case AppRoutes.splashRoute:
+      case AppRoutes.initialRoute || AppRoutes.splashRoute:
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
         );
-
       case AppRoutes.profileSelectionRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const ProfileSelection(),
+          pageBuilder: (context, animation, secondaryAnimation) => const ProfileSelection(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,
@@ -35,8 +32,7 @@ class RouteGenerator {
 
       case AppRoutes.signupRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const Signup(),
+          pageBuilder: (context, animation, secondaryAnimation) => const Signup(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,
@@ -53,8 +49,7 @@ class RouteGenerator {
 
       case AppRoutes.forgotPasswordRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const ForgotPassword(),
+          pageBuilder: (context, animation, secondaryAnimation) => const ForgotPassword(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,
@@ -65,8 +60,7 @@ class RouteGenerator {
 
       case AppRoutes.addChildRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const AddYourChild(),
+          pageBuilder: (context, animation, secondaryAnimation) => const AddYourChild(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,
@@ -77,8 +71,7 @@ class RouteGenerator {
 
       case AppRoutes.homeRoute:
         return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const Home(),
+          pageBuilder: (context, animation, secondaryAnimation) => const Home(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return ScaleTransition(
               scale: animation,

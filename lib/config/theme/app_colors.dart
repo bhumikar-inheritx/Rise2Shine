@@ -4,6 +4,7 @@ class AppColors {
   // Primary Colors - Purple gradient from the app
   static const Color primaryColor = Color(0xFF5A15FA); // Main purple
   static const Color primaryLight = Color(0xFF6A2CFB);
+  static const Color gray4 = Color(0xFFD1D1D6);
 
   // Orange/Yellow accent colors
   static const Color accentOrange = Color(0xFFF5804E); // Orange button color

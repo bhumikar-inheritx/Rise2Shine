@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double? fontSize;
   final bool isOutlined;
+  final EdgeInsets? margin;
   final bool isLoading;
 
   const CustomButton({
@@ -21,6 +22,7 @@ class CustomButton extends StatelessWidget {
     this.fontSize,
     this.isOutlined = false,
     this.isLoading = false,
+    this.margin,
   });
 
   @override
@@ -38,7 +40,7 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50.r),
           ),
-          disabledBackgroundColor: isOutlined 
+          disabledBackgroundColor: isOutlined
               ? AppColors.white.withValues(alpha: 0.7)
               : AppColors.buttonColor.withValues(alpha: 0.7),
         ),

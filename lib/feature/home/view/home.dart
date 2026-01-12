@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider_structure/core/constants/app_constants.dart';
+import 'package:provider_structure/feature/parent_task/page/parent_tasks_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../../config/routes/app_routes.dart';
@@ -31,13 +33,13 @@ class _HomeState extends State<Home> {
 
   Future<void> _handleLogout(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
+
     // Clear passcode session
     await PasscodeService.clearSession();
-    
+
     // Sign out
     await authProvider.signOut();
-    
+
     if (context.mounted) {
       Navigator.pushNamedAndRemoveUntil(
         context,
@@ -57,11 +59,11 @@ class _HomeState extends State<Home> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            TextConstants.addChilds,
+            _getPageTitle(),
             style: TextStyle(
-              fontFamily: 'Nunito',
+              fontFamily: AppConstants.nunitoFont,
               fontWeight: FontWeight.w600,
-              fontSize: 20.sp,
+              fontSize: 20,
               color: AppColors.textPrimary,
             ),
           ),
