@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       // Get AuthProvider
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      
+
       // Check login state from SharedPreferences
       bool isLoggedIn = await authProvider.checkLoginState();
 
@@ -38,19 +38,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // Navigate based on login state
       if (!mounted) return;
-      
+
       if (isLoggedIn) {
         // Check if passcode is set
         final isPasscodeSet = await PasscodeService.isPasscodeSet();
-        
+
         if (!mounted) return;
-        
+
         if (isPasscodeSet) {
           // Always show passcode entry screen even if session is valid
-          print('ℹ️ SplashScreen: User is logged in, navigating to passcode entry');
+          print(
+              'ℹ️ SplashScreen: User is logged in, navigating to passcode entry');
           Navigator.pushReplacementNamed(context, AppRoutes.passcodeEntryRoute);
         } else {
-          print('ℹ️ SplashScreen: User is logged in but passcode not set, navigating to signup');
+          print(
+              'ℹ️ SplashScreen: User is logged in but passcode not set, navigating to signup');
           Navigator.pushReplacementNamed(context, AppRoutes.signupRoute);
         }
       } else {
@@ -71,16 +73,12 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Positioned(
-            top: 347.h,
-            left: 64.w,
-            child: SizedBox(
-              width: 313,
-              height: 262,
-              child: Image.asset(
-                AssetConstants.logo,
-                fit: BoxFit.cover,
-              ),
+          SizedBox(
+            width: 313.w,
+            height: 262.h,
+            child: Image.asset(
+              AssetConstants.logo,
+              fit: BoxFit.cover,
             ),
           ),
         ],

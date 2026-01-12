@@ -14,7 +14,6 @@ import 'core/providers/parent_provider.dart';
 import 'core/services/fcm_service.dart';
 import 'core/utils/toast_util.dart';
 import 'feature/signup/provider/auth_provider.dart';
-import 'feature/splash/splash_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -29,6 +28,10 @@ Future<void> main() async {
       statusBarBrightness: Brightness.light,
     ),
   );
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   try {
     print(' App: Initializing Firebase');
