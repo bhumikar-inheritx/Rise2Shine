@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            _getPageTitle(),
+            TextConstants.addChild,
             style: TextStyle(
               fontFamily: AppConstants.nunitoFont,
               fontWeight: FontWeight.w600,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme/app_colors.dart';
 import '../providers/bottom_navigation_provider.dart';
-import '../../feature/home/widget/custom_bottom_navigation_bar.dart';
+import 'custom_bottom_navigation_bar.dart';
 
 /// MainLayout widget that provides a fixed bottom navigation bar
 /// Wrap your page content with this widget for consistent navigation
